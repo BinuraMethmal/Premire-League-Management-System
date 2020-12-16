@@ -608,6 +608,7 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
         Stage stage = new Stage();
         TableView <FootballClub> table = new TableView<>();
 
+        // Column Design
         TableColumn<FootballClub, String> clubName = new TableColumn<>("Club Name");
         clubName.setCellValueFactory(new PropertyValueFactory<>("clubName"));
         clubName.setStyle("-fx-alignment: CENTER;");
@@ -640,7 +641,7 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
         clubType.setCellValueFactory(new PropertyValueFactory<>("clubType"));
         clubType.setStyle("-fx-alignment: CENTER;");
 
-
+        // Add data to column and show column in GUI
         table.getColumns().setAll(clubName, clubWins, clubDefeats, clubDraws,clubGoals, clubPoints,clubScore,clubType);
         table.setPrefWidth(600);
         table.setPrefHeight(400);
@@ -671,7 +672,7 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
             }
         });
 
-
+        // Interface Design
         Label label = new Label("Premier League Manager");
         label.setStyle("-fx-font-size: 20");
 
