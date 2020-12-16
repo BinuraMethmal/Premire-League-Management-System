@@ -677,9 +677,8 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
     }
 
     // Display Statistics in a Table using GUI
-    public void statsTableGUI(){
-        Stage stage = new Stage();
-        stage.setTitle("Premier League Manager");
+    public void statsTableGUI(Stage stage, Scene back){
+
         TableView <FootballClub> table = new TableView<>();
 
         // Column Design
@@ -725,24 +724,40 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
 
         // Search Option
         TextField searchField = new TextField();
-        Button searchBtn =  new Button("Search");
-        searchBtn.setOnAction(event -> {
-            String searchMe = searchField.getText();
-            searchField.clear();
+        Button searchBtn =  new Button();
+        searchBtn.setText("Search");
 
-//            System.out.println("Searched Objects.");
-//            System.out.println(searchMe);\
+        searchBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String searchMe = searchField.getText();
+                searchField.clear();
 
-            if (searchMe.equals("")){
-                table.getItems().setAll(clubData);
-            }else{
-                ArrayList<FootballClub> tempArray = new ArrayList<>();
-                for (FootballClub club : clubData){
-                    if (club.search(searchMe)){
-                        tempArray.add(club);
+                //System.out.println("Searched Objects.");
+                //System.out.println(searchMe);
+
+                if (searchMe.equals("")){
+                    table.getItems().setAll(clubData);
+                }else{
+                    ArrayList<FootballClub> tempArray = new ArrayList<>();
+                    for (FootballClub club : clubData){
+                        if (club.search(searchMe)){
+                            tempArray.add(club);
+                        }
                     }
+                    table.getItems().setAll(tempArray);
                 }
-                table.getItems().setAll(tempArray);
+            }
+        });
+
+        // back button
+        Button backBtn = new Button();
+        backBtn.setText("Back");
+
+        backBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                stage.setScene(back);
             }
         });
 
@@ -750,7 +765,7 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
         Label label = new Label("Premier League Manager");
         label.setStyle("-fx-font-size: 20");
 
-        HBox search = new HBox(label,searchField,searchBtn);
+        HBox search = new HBox(label,searchField,searchBtn,backBtn);
         search.setSpacing(10);
         search.setStyle("-fx-padding: 10");
         VBox mainContainer = new VBox(search,table);
@@ -758,17 +773,21 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
 
         Scene scene = new Scene(mainContainer);
         stage.setScene(scene);
-        stage.showAndWait();
-
-
     }
 
     // Display Played matches in a Table using GUI
     public void matchTable(){
 
+        clubData.sort(new Comparator<FootballClub>() {
+            @Override
+            public int compare(FootballClub o1, FootballClub o2) {
+                return 0;
+            }
+        });
+
 
     }
-    
+
     // GUI Part
     public void gui(){
         Stage stage = new Stage();
@@ -785,7 +804,8 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
         bt1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                statsTableGUI();
+                sortData();
+                statsTableGUI(stage, grid.getScene());
             }
         });
 
@@ -799,6 +819,31 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
             @Override
             public void handle(ActionEvent event) {
 
+                clubData.sort(new Comparator<FootballClub>() {
+                    @Override
+                    public int compare(FootballClub o1, FootballClub o2) {
+                        int result;
+
+                        // Compare 1st point to 2nd point
+                        Integer x = o1.getClubGoals();
+                        Integer y = o2.getClubGoals();
+
+                        result = y.compareTo(x);
+
+                        // when both points are equal comparing with Goals
+                        if (x.equals(y)){
+
+                            Double p = o1.getClubPoints();
+                            Double q = o2.getClubPoints();
+
+                            result = q.compareTo(p);
+
+                        }
+                        return result;
+
+                    }
+                });
+                statsTableGUI(stage, grid.getScene());
             }
         });
 
@@ -812,6 +857,32 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
             @Override
             public void handle(ActionEvent event) {
 
+                clubData.sort(new Comparator<FootballClub>() {
+                    @Override
+                    public int compare(FootballClub o1, FootballClub o2) {
+                        int result;
+
+                        // Compare 1st point to 2nd point
+                        Integer x = o1.getClubWins();
+                        Integer y = o2.getClubWins();
+
+                        result = y.compareTo(x);
+
+                        // when both points are equal comparing with Goals
+                        if (x.equals(y)){
+
+                            Double p = o1.getClubPoints();
+                            Double q = o2.getClubPoints();
+
+                            result = q.compareTo(p);
+
+                        }
+                        return result;
+
+                    }
+                });
+                statsTableGUI(stage, grid.getScene());
+
             }
         });
 
@@ -824,6 +895,7 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
         bt4.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+
 
             }
         });
