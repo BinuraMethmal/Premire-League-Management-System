@@ -179,6 +179,11 @@ public class FootballClub extends SportsClub implements Serializable {
 
     }
 
+    public boolean search(String searchTerm){
+        if (matchDate.equals(searchTerm)) return true;
+        else return false;
+    }
+
 
 
     @Override

@@ -776,15 +776,94 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
     }
 
     // Display Played matches in a Table using GUI
-    public void matchTable(){
+    public void matchTable(Stage stage, Scene back){
 
-        clubData.sort(new Comparator<FootballClub>() {
+        TableView <FootballClub> table = new TableView<>();
+
+        // Column Design
+        TableColumn<FootballClub, String> teamOne = new TableColumn<>("Team One");
+        teamOne.setCellValueFactory(new PropertyValueFactory<>("teamOne"));
+        teamOne.setStyle("-fx-alignment: CENTER;");
+
+        TableColumn<FootballClub, String> teamTwo = new TableColumn<>("Team Two");
+        teamTwo.setCellValueFactory(new PropertyValueFactory<>("teamTwo"));
+        teamTwo.setStyle("-fx-alignment: CENTER;");
+
+        TableColumn<FootballClub, String> matchDate = new TableColumn<>("Date of Match");
+        matchDate.setCellValueFactory(new PropertyValueFactory<>("matchDate"));
+        matchDate.setStyle("-fx-alignment: CENTER;");
+
+        TableColumn<FootballClub, String> teamScore1 = new TableColumn<>("1st Team Score");
+        teamScore1.setCellValueFactory(new PropertyValueFactory<>("teamScore1"));
+        teamScore1.setStyle("-fx-alignment: CENTER;");
+
+        TableColumn<FootballClub, String> teamScore2 = new TableColumn<>("2nd Team Score");
+        teamScore2.setCellValueFactory(new PropertyValueFactory<>("teamScore2"));
+        teamScore2.setStyle("-fx-alignment: CENTER;");
+
+        TableColumn<FootballClub, String> winner = new TableColumn<>("Winner");
+        winner.setCellValueFactory(new PropertyValueFactory<>("winner"));
+        winner.setStyle("-fx-alignment: CENTER;");
+
+        // Add data to column and show column in GUI
+        table.getColumns().setAll(teamOne,teamTwo,teamScore1,teamScore2,winner);
+        table.setPrefWidth(600);
+        table.setPrefHeight(400);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        table.getItems().setAll(matchData);
+        table.setStyle("-fx-pref-rows: 100");
+
+        // Search Option
+        TextField searchField = new TextField();
+        Button searchBtn =  new Button();
+        searchBtn.setText("Search");
+
+        searchBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
-            public int compare(FootballClub o1, FootballClub o2) {
-                return 0;
+            public void handle(ActionEvent event) {
+                String searchMe = searchField.getText();
+                searchField.clear();
+
+                //System.out.println("Searched Objects.");
+                //System.out.println(searchMe);
+
+                if (searchMe.equals("")){
+                    table.getItems().setAll(matchData);
+                }else{
+                    ArrayList<FootballClub> tempArray = new ArrayList<>();
+                    for (FootballClub club : matchData){
+                        if (club.search(searchMe)){
+                            tempArray.add(club);
+                        }
+                    }
+                    table.getItems().setAll(tempArray);
+                }
             }
         });
 
+        // back button
+        Button backBtn = new Button();
+        backBtn.setText("Back");
+
+        backBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                stage.setScene(back);
+            }
+        });
+
+        // Interface Design
+        Label label = new Label("Premier League Manager");
+        label.setStyle("-fx-font-size: 20");
+
+        HBox search = new HBox(label,searchField,searchBtn,backBtn);
+        search.setSpacing(10);
+        search.setStyle("-fx-padding: 10");
+        VBox mainContainer = new VBox(search,table);
+        //mainContainer.setSpacing(10);
+
+        Scene scene = new Scene(mainContainer);
+        stage.setScene(scene);
 
     }
 
@@ -797,6 +876,10 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
         grid.setPadding(new Insets(10,10,10,10));
         grid.setVgap(8);
         grid.setHgap(10);
+
+        Label label = new Label("Premier League Manager");
+        label.setStyle("-fx-font-size: 20");
+        GridPane.setConstraints(label,3,0);
 
         Button bt1 = new Button();
         bt1.setText("Statics");
@@ -910,12 +993,14 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
             @Override
             public void handle(ActionEvent event) {
 
+                matchTable(stage, grid.getScene());
+
             }
         });
 
-        GridPane.setConstraints(bt5,1,5);
+        GridPane.setConstraints(bt5,2,4);
 
-        grid.getChildren().addAll(bt1,bt2,bt3,bt4,bt5);
+        grid.getChildren().addAll(label,bt1,bt2,bt3,bt4,bt5);
 
         Scene scene = new Scene(grid,600,400);
         stage.setScene(scene);
