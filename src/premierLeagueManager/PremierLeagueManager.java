@@ -2,6 +2,10 @@ package premierLeagueManager;
 
 //import javafx.application.Application;
 //import javafx.stage.Stage;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.layout.GridPane;
 import premierLeagueManager.footBallClubs.FootballClub;
 import premierLeagueManager.footBallClubs.SchoolFootballClub;
 import premierLeagueManager.footBallClubs.UniversityFootballClub;
@@ -63,11 +67,11 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
                     break;
 
                 case "P":
-                    sortData();
+                    statsTableCLI();
                     break;
 
                 case "G":
-                    guiTable();
+                    gui();
                     break;
 
                 case "D":
@@ -573,6 +577,12 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
                 return false;
             }
         });
+    }
+
+    // Display Statistics in a Table using CLI
+    public void statsTableCLI(){
+
+        sortData();
 
         // Print some of attributes of the table after sorted
         for (FootballClub club: clubData){
@@ -600,12 +610,76 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
 //
 //        System.out.format("+-----------------+---------+--------+--------+--------+-----------+--------+--------------+%n");
 //        System.out.println("\n");
+    }
+
+    // Method for Save data to Local file
+    public void saveData()throws IOException  {
+
+        File file1 = new File("PremierLeagueMangerData.txt");
+        file1.createNewFile();
+
+        FileOutputStream fileOut = new FileOutputStream(file1,true);
+        ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
+
+        Iterator it1 = clubData.iterator();
+        Iterator it2 = matchData.iterator();
+
+        while (it1.hasNext()){
+
+            FootballClub clubTemp = (FootballClub) it1.next();
+            objOut.writeObject(clubTemp);
+
+        }
+
+        while (it2.hasNext()){
+
+            FootballClub matchTemp = (FootballClub) it2.next();
+            objOut.writeObject(matchTemp);
+
+        }
+
+        fileOut.close();
+        objOut.close();
 
     }
 
-    // Display Table in GUI
-    public void guiTable(){
+    // Method to Load data from saved file
+    public void loadData() throws IOException, ClassNotFoundException{
+
+        FileInputStream fileIn = new FileInputStream("PremierLeagueMangerData.txt");
+        ObjectInputStream objIn = new ObjectInputStream(fileIn);
+
+        while (true){
+            try {
+                FootballClub club = (FootballClub) objIn.readObject();
+                clubData.add(club);
+
+            } catch (IOException | ClassNotFoundException e){
+                break;
+
+            }
+        }
+
+        while (true){
+            try {
+                FootballClub match = (FootballClub) objIn.readObject();
+                matchData.add(match);
+
+            } catch (IOException | ClassNotFoundException e){
+                break;
+
+            }
+        }
+
+        fileIn.close();
+        objIn.close();
+
+    }
+
+    // Display Statistics in a Table using GUI
+    public void statsTable(){
         Stage stage = new Stage();
+        stage.setTitle("Premier League Manager");
         TableView <FootballClub> table = new TableView<>();
 
         // Column Design
@@ -689,67 +763,90 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
 
     }
 
-    // Method for Save data to Local file
-    public void saveData()throws IOException  {
+    // Display Played matches in a Table using GUI
+    public void matchTable(){
 
-        File file1 = new File("PremierLeagueMangerData.txt");
-        file1.createNewFile();
-
-        FileOutputStream fileOut = new FileOutputStream(file1,true);
-        ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
-
-        Iterator it1 = clubData.iterator();
-        Iterator it2 = matchData.iterator();
-
-        while (it1.hasNext()){
-
-            FootballClub clubTemp = (FootballClub) it1.next();
-            objOut.writeObject(clubTemp);
-
-        }
-
-        while (it2.hasNext()){
-
-            FootballClub matchTemp = (FootballClub) it2.next();
-            objOut.writeObject(matchTemp);
-
-        }
-
-        fileOut.close();
-        objOut.close();
 
     }
+    // GUI Part
+    public void gui(){
+        Stage stage = new Stage();
+        stage.setTitle("Premier League Manager");
 
-    // Method to Load data from saved file
-    public void loadData() throws IOException, ClassNotFoundException{
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(10,10,10,10));
+        grid.setVgap(8);
+        grid.setHgap(10);
 
-        FileInputStream fileIn = new FileInputStream("PremierLeagueMangerData.txt");
-        ObjectInputStream objIn = new ObjectInputStream(fileIn);
+        Button bt1 = new Button();
+        bt1.setText("Statics");
 
-        while (true){
-            try {
-                FootballClub club = (FootballClub) objIn.readObject();
-                clubData.add(club);
+        bt1.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                statsTable();
+            }
+        });
 
-            } catch (IOException | ClassNotFoundException e){
-                break;
+        GridPane.setConstraints(bt1,1,2);
+
+        // Sort by Goals part
+        Button bt2 = new Button();
+        bt2.setText("Sort by Goals");
+
+        bt2.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
 
             }
-        }
+        });
 
-        while (true){
-            try {
-                FootballClub match = (FootballClub) objIn.readObject();
-                matchData.add(match);
+        GridPane.setConstraints(bt2,2,2);
 
-            } catch (IOException | ClassNotFoundException e){
-                break;
+        //Sort by wins part
+        Button bt3 = new Button();
+        bt3.setText("Sort by Wins");
+
+        bt3.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
 
             }
-        }
+        });
 
-        fileIn.close();
-        objIn.close();
+        GridPane.setConstraints(bt3,3,2);
+
+        // Random Played Match
+        Button bt4 = new Button();
+        bt4.setText("Random Match");
+
+        bt4.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+
+        GridPane.setConstraints(bt4,1,4);
+
+        // Match Table sort by date part
+        Button bt5 = new Button();
+        bt5.setText("Match Table");
+
+        bt5.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+            }
+        });
+
+        GridPane.setConstraints(bt5,1,5);
+
+        grid.getChildren().addAll(bt1,bt2,bt3,bt4,bt5);
+
+        Scene scene = new Scene(grid,600,400);
+        stage.setScene(scene);
+        stage.showAndWait();
 
     }
 
