@@ -677,7 +677,7 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
     }
 
     // Display Statistics in a Table using GUI
-    public void statsTable(){
+    public void statsTableGUI(){
         Stage stage = new Stage();
         stage.setTitle("Premier League Manager");
         TableView <FootballClub> table = new TableView<>();
@@ -768,6 +768,7 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
 
 
     }
+    
     // GUI Part
     public void gui(){
         Stage stage = new Stage();
@@ -784,7 +785,7 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
         bt1.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                statsTable();
+                statsTableGUI();
             }
         });
 
