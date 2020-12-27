@@ -27,7 +27,7 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
 
     // Arrays for store Objects temporary
     public static ArrayList<FootballClub> clubData = new ArrayList<>(); // --> Club Details
-    public static ArrayList<FootballClub> matchData = new ArrayList<>(); // --> Match Details
+    public static ArrayList<Match> matchData = new ArrayList<>(); // --> Match Details
 
     @Override
     public void start(Stage primaryStage) throws IOException, ClassNotFoundException {
@@ -422,128 +422,136 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
 
     // Add Played match method
     public void addMatch(){
+
         double team1Score = 0;
         double team2Score = 0;
-        Date date;
-        String clubName1;
-        String clubName2;
+        int team1Goals =0;
+        int team2Goals =0;
+        Date date = null;
+        String teamOne;
+        String teamTwo;
 
-        int tempClub;
+        Scanner myObj = new Scanner(System.in);
 
-        while (true){
+        System.out.print("Enter Team One: ");
+        teamOne = myObj.nextLine();
 
-            Scanner myObj = new Scanner(System.in);
-
-            // Enter Two teams
-            System.out.print("Enter 1st Team Name(Club Name): ");
-            clubName1 = myObj.nextLine();
-            System.out.print("Enter 2nd Team Name(Club Name): ");
-            clubName2 = myObj.nextLine();
-
-            for (SportsClub club : clubData){
-
-                // Check Team one and Team two are registered or not in this system
-                if( ! clubName1.toUpperCase().equalsIgnoreCase(club.getClubName().toUpperCase())){
-
-                    System.out.println("** This System haven't a Club called "+ clubName1 +". **");
-
-                } else if(! clubName2.toUpperCase().equalsIgnoreCase(club.getClubName().toUpperCase())){
-
-                    System.out.println("** This System haven't a Club called "+ clubName2 +". **");
-
-//                if (clubName1.toUpperCase().equalsIgnoreCase(club.getClubName().toUpperCase()) &&
-//                        clubName2.toUpperCase().equalsIgnoreCase(club.getClubName().toUpperCase())){
-
-
-                } else {
-                    FootballClub match = new FootballClub();
-
-                    // Enter Match Date
-                    System.out.print("Enter Match date (Format - 'DD/MM/YYYY'): ");
-                    String matchDate = myObj.nextLine();
-
-                    // Check date is in right format
-                    try {
-                        date = new Date(matchDate);
-                    } catch (IllegalArgumentException e){
-                        continue;
-                    }
-
-                    // Enter Team 1 Score
-                    System.out.println("Enter Team 1 Score: ");
-
-                    // Check score is in correct data type (Double)
-                    try{
-                        team1Score = myObj.nextDouble();
-                    } catch (InputMismatchException e){
-                        System.out.println("** Double Value Required! **");
-                    }
-
-                    // Enter Team 2 Score
-
-                    System.out.println("Enter Team 2 Score: ");
-
-                    // Check score is in correct data type (Double)
-                    try{
-                        team2Score = myObj.nextDouble();
-                    } catch (InputMismatchException e){
-                        System.out.println("** Double Value Required! **");
-                    }
-
-
-                    match.setTeamOne(clubName1);
-                    match.setTeamTwo(clubName2);
-                    match.setMatchDate(date);
-                    match.setTeamScore1(team1Score);
-                    match.setTeamScore2(team2Score);
-
-                    matchData.add(match);
-
-                    if (team1Score > team2Score){
-
-                        for(FootballClub upClub : clubData){
-                            if (clubName1.toUpperCase().equalsIgnoreCase(upClub.getClubName().toUpperCase())){
-                                upClub.setClubWins(upClub.getClubWins()+1);
-                                clubData.add(upClub);
-                            }
-
-                            if (clubName2.toUpperCase().equalsIgnoreCase(upClub.getClubName().toUpperCase())){
-                                upClub.setClubDefeats(upClub.getClubDefeats() + 1);
-                            }
-                        }
-
-                    } else if (team1Score < team2Score){
-
-                        for(FootballClub upClub : clubData){
-                            if (clubName1.toUpperCase().equalsIgnoreCase(upClub.getClubName().toUpperCase())){
-                                upClub.setClubWins(upClub.getClubWins()+1);
-                                clubData.add(upClub);
-                            }
-
-                            if (clubName2.toUpperCase().equalsIgnoreCase((upClub.getClubName().toUpperCase()))){
-                                upClub.setClubDefeats(upClub.getClubDefeats() + 1);
-                                clubData.add(upClub);
-                            }
-                        }
-
-                    } else {
-                        for(FootballClub upClub : clubData){
-                            if (clubName1.toUpperCase().equalsIgnoreCase(upClub.getClubName().toUpperCase())){
-                                upClub.setClubDraws(upClub.getClubDraws()+1);
-                                clubData.add(upClub);
-                            }
-
-                            if (clubName2.toUpperCase().equalsIgnoreCase(upClub.getClubName().toUpperCase())){
-                                upClub.setClubDraws(upClub.getClubDraws()+1);
-                                clubData.add(upClub);
-                            }
-                        }
-                    }
-
-
-                }
-            }
+        FootballClub firstTeam = null;
+        for(FootballClub club : clubData){
+            if(club.getClubName().equals(teamOne))
+                firstTeam = club;
         }
+
+        if (firstTeam == null) {
+            System.out.println("** This kind club not Registered in system. **");
+            return;
+        }
+
+        System.out.print("Enter Team Two: ");
+        teamTwo = myObj.nextLine();
+
+        FootballClub secondTeam = null;
+        for(FootballClub club : clubData){
+            if(club.getClubName().equals(teamTwo))
+                secondTeam = club;
+        }
+
+        if (secondTeam == null) {
+            System.out.println("** This kind club not Registered in system. **");
+            return;
+        }
+
+        while (true) {
+
+            // Enter Match Date
+            System.out.print("Enter Match date (Format - 'DD/MM/YYYY'): ");
+            String matchDate = myObj.nextLine();
+
+            // Check date is in right format
+            try {
+                date = new Date(matchDate);
+
+            } catch (IllegalArgumentException e) {
+                continue;
+
+            }
+
+            // Enter Team 1 Score
+            System.out.println("Enter Team One Score: ");
+
+            // Check score is in correct data type (Double)
+            try {
+                team1Score = myObj.nextDouble();
+
+            } catch (InputMismatchException e) {
+                System.out.println("** Double Value Required! **");
+            }
+
+            // Enter Team 2 Score
+            System.out.println("Enter Team Two Score: ");
+
+            // Check score is in correct data type (Double)
+            try {
+                team2Score = myObj.nextDouble();
+
+            } catch (InputMismatchException e) {
+                System.out.println("** Double Value Required! **");
+            }
+
+            // Enter Team 1 Goals
+            System.out.println("Enter Team One goals: ");
+
+            try {
+                team1Goals = myObj.nextInt();
+
+            } catch (InputMismatchException e) {
+                System.out.println("** You have to enter number of Goals. It should be integer value! **");
+            }
+
+            // Enter Team 2 Goals
+            System.out.println("Enter Team Two goals: ");
+
+            try {
+                team2Goals = myObj.nextInt();
+
+            } catch (InputMismatchException e) {
+                System.out.println("** You have to enter number of Goals. It should be integer value! **");
+            }
+
+
+            Match match = new Match();
+            match.setMatchDate(date);
+            match.setTeamOne(teamOne);
+            match.setTeamTwo(teamTwo);
+            match.setTeamScore1(team1Score);
+            match.setTeamScore2(team2Score);
+            match.setTeamGoals1(team1Goals);
+            match.setTeamGoals2(team2Goals);
+
+            matchData.add(match);
+
+            firstTeam.setClubGoals(firstTeam.getClubGoals() + team1Goals);
+            secondTeam.setClubGoals(secondTeam.getClubGoals() + team2Goals);
+            firstTeam.setClubScore(firstTeam.getClubScore() + team1Score);
+            secondTeam.setClubScore(secondTeam.getClubScore() + team2Score);
+            firstTeam.setClubMatches(firstTeam.getClubMatches() + 1);
+            secondTeam.setClubMatches(secondTeam.getClubMatches() + 1);
+
+            if (team1Score > team2Score) {
+                firstTeam.setClubWins(firstTeam.getClubWins() + 1);
+                secondTeam.setClubDefeats(secondTeam.getClubDefeats() + 1);
+
+            } else if (team1Score < team2Score) {
+                secondTeam.setClubWins(secondTeam.getClubWins() + 1);
+                firstTeam.setClubDefeats(firstTeam.getClubDefeats() + 1);
+
+            } else {
+                firstTeam.setClubDraws(firstTeam.getClubDraws() + 1);
+                secondTeam.setClubDraws(secondTeam.getClubDraws() + 1);
+            }
+            break;
+        }
+
     }
 
     // Data Sorting and Display Table in CLI Method
@@ -612,6 +620,10 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
 //        System.out.println("\n");
     }
 
+    public void randomMatch(){
+        
+    }
+
     // Method for Save data to Local file
     public void saveData()throws IOException  {
 
@@ -662,7 +674,7 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
 
         while (true){
             try {
-                FootballClub match = (FootballClub) objIn.readObject();
+                Match match = (Match) objIn.readObject();
                 matchData.add(match);
 
             } catch (IOException | ClassNotFoundException e){
@@ -710,12 +722,9 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
         clubScore.setCellValueFactory(new PropertyValueFactory<>("clubScore"));
         clubScore.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<FootballClub, String> clubType = new TableColumn<>("Club Type");
-        clubType.setCellValueFactory(new PropertyValueFactory<>("clubType"));
-        clubType.setStyle("-fx-alignment: CENTER;");
 
         // Add data to column and show column in GUI
-        table.getColumns().setAll(clubName, clubWins, clubDefeats, clubDraws,clubGoals, clubPoints,clubScore,clubType);
+        table.getColumns().setAll(clubName, clubWins, clubDefeats, clubDraws,clubGoals, clubPoints,clubScore);
         table.setPrefWidth(600);
         table.setPrefHeight(400);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -778,36 +787,40 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
     // Display Played matches in a Table using GUI
     public void matchTable(Stage stage, Scene back){
 
-        TableView <FootballClub> table = new TableView<>();
+        TableView <Match> table = new TableView<>();
 
         // Column Design
-        TableColumn<FootballClub, String> teamOne = new TableColumn<>("Team One");
+        TableColumn<Match, String> teamOne = new TableColumn<>("Team One");
         teamOne.setCellValueFactory(new PropertyValueFactory<>("teamOne"));
         teamOne.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<FootballClub, String> teamTwo = new TableColumn<>("Team Two");
+        TableColumn<Match, String> teamTwo = new TableColumn<>("Team Two");
         teamTwo.setCellValueFactory(new PropertyValueFactory<>("teamTwo"));
         teamTwo.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<FootballClub, String> matchDate = new TableColumn<>("Date of Match");
-        matchDate.setCellValueFactory(new PropertyValueFactory<>("matchDate"));
-        matchDate.setStyle("-fx-alignment: CENTER;");
-
-        TableColumn<FootballClub, String> teamScore1 = new TableColumn<>("1st Team Score");
+        TableColumn<Match, String> teamScore1 = new TableColumn<>("1st Team Score");
         teamScore1.setCellValueFactory(new PropertyValueFactory<>("teamScore1"));
         teamScore1.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<FootballClub, String> teamScore2 = new TableColumn<>("2nd Team Score");
+        TableColumn<Match, String> teamScore2 = new TableColumn<>("2nd Team Score");
         teamScore2.setCellValueFactory(new PropertyValueFactory<>("teamScore2"));
         teamScore2.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<FootballClub, String> winner = new TableColumn<>("Winner");
-        winner.setCellValueFactory(new PropertyValueFactory<>("winner"));
-        winner.setStyle("-fx-alignment: CENTER;");
+        TableColumn<Match, String> teamGoals1 = new TableColumn<>("1st Team Goals");
+        teamGoals1.setCellValueFactory(new PropertyValueFactory<>("teamGoals1"));
+        teamGoals1.setStyle("-fx-alignment: CENTER;");
+
+        TableColumn<Match, String> teamGoals2 = new TableColumn<>("2nd Team Goals");
+        teamGoals2.setCellValueFactory(new PropertyValueFactory<>("teamGoals2"));
+        teamGoals2.setStyle("-fx-alignment: CENTER;");
+
+        TableColumn<Match, String> matchDate = new TableColumn<>("D.O.M");
+        matchDate.setCellValueFactory(new PropertyValueFactory<>("matchDate"));
+        matchDate.setStyle("-fx-alignment: CENTER;");
 
         // Add data to column and show column in GUI
-        table.getColumns().setAll(teamOne,teamTwo,teamScore1,teamScore2,winner);
-        table.setPrefWidth(600);
+        table.getColumns().setAll(teamOne,teamTwo,teamScore1,teamScore2,teamGoals1,teamGoals2,matchDate);
+        table.setPrefWidth(1000);
         table.setPrefHeight(400);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         table.getItems().setAll(matchData);
@@ -830,8 +843,10 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
                 if (searchMe.equals("")){
                     table.getItems().setAll(matchData);
                 }else{
-                    ArrayList<FootballClub> tempArray = new ArrayList<>();
-                    for (FootballClub club : matchData){
+
+                    ArrayList<Match> tempArray = new ArrayList<>();
+                    for (Match club : matchData){
+
                         if (club.search(searchMe)){
                             tempArray.add(club);
                         }

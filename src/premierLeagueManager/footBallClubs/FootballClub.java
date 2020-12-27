@@ -16,11 +16,7 @@ public class FootballClub extends SportsClub implements Serializable {
     private double clubScore;
     private double clubPoints;
     private int clubMatches;
-    private String teamOne;
-    private String teamTwo;
-    private Date matchDate;
-    private double teamScore1;
-    private double teamScore2;
+
 
 
 
@@ -35,10 +31,7 @@ public class FootballClub extends SportsClub implements Serializable {
         this.clubScore = clubScore;
         this.clubPoints = clubPoints;
         this.clubMatches = clubMatches;
-        this.teamOne = teamOne;
-        this.teamTwo = teamTwo;
-        this.matchDate = matchDate;
-        this.teamScore1 = matchScore;
+
     }
 
     public FootballClub() {
@@ -80,25 +73,6 @@ public class FootballClub extends SportsClub implements Serializable {
         this.clubScore = clubScore;
     }
 
-    public void setTeamOne(String teamOne) {
-        this.teamOne = teamOne;
-    }
-
-    public void setTeamTwo(String teamTwo) {
-        this.teamTwo = teamTwo;
-    }
-
-    public void setMatchDate(Date matchDate) {
-        this.matchDate = matchDate;
-    }
-
-    public void setTeamScore1(double teamScore1) {
-        this.teamScore1 = teamScore1;
-    }
-
-    public void setTeamScore2(double teamScore2) {
-        this.teamScore2 = teamScore2;
-    }
 
     // Getters
 
@@ -131,25 +105,7 @@ public class FootballClub extends SportsClub implements Serializable {
         return clubMatches;
     }
 
-    public String getTeamOne() {
-        return teamOne;
-    }
 
-    public String getTeamTwo() {
-        return teamTwo;
-    }
-
-    public Date getMatchDate() {
-        return matchDate;
-    }
-
-    public double getTeamScore1() {
-        return teamScore1;
-    }
-
-    public double getTeamScore2() {
-        return teamScore2;
-    }
 
     @Override
     public String toString() {
@@ -179,10 +135,7 @@ public class FootballClub extends SportsClub implements Serializable {
 
     }
 
-    public boolean search(String searchTerm){
-        if (matchDate.equals(searchTerm)) return true;
-        else return false;
-    }
+
 
 
 
