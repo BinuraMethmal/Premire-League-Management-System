@@ -5,10 +5,10 @@ public class Match {
     private String teamOne;
     private String teamTwo;
     private Date matchDate;
-    private double teamScore1;
-    private double teamScore2;
-    private int teamGoals1;
-    private int teamGoals2;
+    private int team1GoalsReceived;
+    private int team2GoalsReceived;
+    private int team1GoalsScored;
+    private int team2GoalsScored;
 
     //Setters
     public void setTeamOne(String teamOne) {
@@ -23,22 +23,21 @@ public class Match {
         this.matchDate = matchDate;
     }
 
-    public void setTeamScore1(double teamScore1) {
-        this.teamScore1 = teamScore1;
+    public void setTeam1GoalsReceived(int team1GoalsReceived) {
+        this.team1GoalsReceived = team1GoalsReceived;
     }
 
-    public void setTeamScore2(double teamScore2) {
-        this.teamScore2 = teamScore2;
+    public void setTeam2GoalsReceived(int team2GoalsReceived) {
+        this.team2GoalsReceived = team2GoalsReceived;
     }
 
-    public void setTeamGoals1(int teamGoals1) {
-        this.teamGoals1 = teamGoals1;
+    public void setTeam1GoalsScored(int team1GoalsScored) {
+        this.team1GoalsScored = team1GoalsScored;
     }
 
-    public void setTeamGoals2(int teamGoals2) {
-        this.teamGoals2 = teamGoals2;
+    public void setTeam2GoalsScored(int team2GoalsScored) {
+        this.team2GoalsScored = team2GoalsScored;
     }
-
 
     //Getters
     public String getTeamOne() {
@@ -53,23 +52,21 @@ public class Match {
         return matchDate;
     }
 
-    public double getTeamScore1() {
-        return teamScore1;
+    public int getTeam1GoalsReceived() {
+        return team1GoalsReceived;
     }
 
-    public double getTeamScore2() {
-        return teamScore2;
+    public int getTeam2GoalsReceived() {
+        return team2GoalsReceived;
     }
 
-    public int getTeamGoals1() {
-        return teamGoals1;
+    public int getTeam1GoalsScored() {
+        return team1GoalsScored;
     }
 
-    public int getTeamGoals2() {
-        return teamGoals2;
+    public int getTeam2GoalsScored() {
+        return team2GoalsScored;
     }
-
-
 
     public boolean search(String searchTerm){
         if (matchDate.equals(searchTerm)) return true;
@@ -79,11 +76,13 @@ public class Match {
     @Override
     public String toString() {
         return "Match{" +
-                "teamOne='" + teamOne + '\'' +
-                ", teamTwo='" + teamTwo + '\'' +
-                ", matchDate=" + matchDate +
-                ", teamScore1=" + teamScore1 +
-                ", teamScore2=" + teamScore2 +
+                "Team One='" + teamOne + '\'' +
+                ", Team Two='" + teamTwo + '\'' +
+                ", DOF=" + matchDate +
+                ", Team 1 Received Goals=" + team1GoalsReceived +
+                ", Team 2 Received Goals=" + team2GoalsReceived +
+                ", Team 1 Scored Goals=" + team1GoalsScored +
+                ", Team 2 Scored Goals=" + team2GoalsScored +
                 '}';
     }
 }

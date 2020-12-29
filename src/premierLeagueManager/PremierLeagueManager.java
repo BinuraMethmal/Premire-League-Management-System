@@ -26,8 +26,9 @@ import javafx.stage.Stage;
 public class PremierLeagueManager extends Application implements LeagueManger  {
 
     // Arrays for store Objects temporary
-    public static ArrayList<FootballClub> clubData = new ArrayList<>(); // --> Club Details
-    public static ArrayList<Match> matchData = new ArrayList<>(); // --> Match Details
+    public static ArrayList<FootballClub> clubData = new ArrayList<>(); // --> Football Clubs Details
+    public static ArrayList<Match> matchData = new ArrayList<>(); // --> Matches Details
+    public static ArrayList<SportsClub> normalClub = new ArrayList<>(); // --> Normal Clubs Details
 
     @Override
     public void start(Stage primaryStage) throws IOException, ClassNotFoundException {
@@ -140,36 +141,6 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
 
                             FootballClub club = new FootballClub();
 
-                            System.out.println("Enter your statistics of the Club- ");
-                            System.out.print("Enter your Wins (Count)- ");
-
-                            int wins = myObj.nextInt();
-                            club.setClubWins(wins);
-
-                            System.out.print("Enter your defeats (Count)- ");
-                            int defeats = myObj.nextInt();
-                            club.setClubDefeats(defeats);
-
-                            System.out.print("Enter your Draws (Count)- ");
-                            int draws = myObj.nextInt();
-                            club.setClubDraws(draws);
-
-                            System.out.print("Goals- ");
-                            int goals = myObj.nextInt();
-                            club.setClubGoals(goals);
-
-                            System.out.print("Score- ");
-                            double score = myObj.nextDouble();
-                            club.setClubScore(score);
-
-                            System.out.print("Enter number of points of your club has- ");
-                            double points = myObj.nextDouble();
-                            club.setClubPoints(points);
-
-                            System.out.print("Enter number of matches of your club- ");
-                            int matches = myObj.nextInt();
-                            club.setClubMatches(matches);
-
                             // Set Default values
                             club.setClubName(name);
                             club.setClubAddress1(location[0]);
@@ -199,35 +170,6 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
                             String uniLocation = myObj.nextLine();
                             club.setUniversityLocation(uniLocation);
 
-                            System.out.println("Enter your statistics of the Club- ");
-                            System.out.print("Enter your Wins (Count)- ");
-                            int wins = myObj.nextInt();
-                            club.setClubWins(wins);
-
-                            System.out.print("Enter your defeats (Count)- ");
-                            int defeats = myObj.nextInt();
-                            club.setClubDefeats(defeats);
-
-                            System.out.print("Enter your Draws (Count)- ");
-                            int draws = myObj.nextInt();
-                            club.setClubDraws(draws);
-
-                            System.out.print("Goals- ");
-                            int goals = myObj.nextInt();
-                            club.setClubGoals(goals);
-
-                            System.out.print("Score- ");
-                            double score = myObj.nextDouble();
-                            club.setClubScore(score);
-
-                            System.out.print("Enter number of points of your club has- ");
-                            double points = myObj.nextDouble();
-                            club.setClubPoints(points);
-
-                            System.out.print("Enter number of matches of your club- ");
-                            int matches = myObj.nextInt();
-                            club.setClubMatches(matches);
-
                             clubData.add(club);
 
                             // Take user inputs for School Club
@@ -249,35 +191,6 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
                             System.out.print("Enter your School Location- ");
                             String sclLocation = myObj.nextLine();
                             club.setSchoolLocation(sclLocation);
-
-                            System.out.println("Enter your statistics of the Club- ");
-                            System.out.print("Enter your Wins (Count)- ");
-                            int wins = myObj.nextInt();
-                            club.setClubWins(wins);
-
-                            System.out.print("Enter your defeats (Count)- ");
-                            int defeats = myObj.nextInt();
-                            club.setClubDefeats(defeats);
-
-                            System.out.print("Enter your Draws (Count)- ");
-                            int draws = myObj.nextInt();
-                            club.setClubDraws(draws);
-
-                            System.out.print("Goals- ");
-                            int goals = myObj.nextInt();
-                            club.setClubGoals(goals);
-
-                            System.out.print("Score- ");
-                            double score = myObj.nextDouble();
-                            club.setClubScore(score);
-
-                            System.out.print("Enter number of points of your club has- ");
-                            double points = myObj.nextDouble();
-                            club.setClubPoints(points);
-
-                            System.out.print("Enter number of matches of your club- ");
-                            int matches = myObj.nextInt();
-                            club.setClubMatches(matches);
 
                             clubData.add(club);
                         } else {
@@ -311,6 +224,7 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
                     club.setClubZipCode(location[2]);
                     club.setClubCountry(location[3]);
 
+                    normalClub.add(club);
 
                 } else {
                     System.out.println("** Invalid Input. Try Again! **\n");
@@ -401,8 +315,8 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
                         int wins = stats.getClubWins();
                         int draws = stats.getClubDraws();
                         int defeat = stats.getClubDefeats();
-                        int goals = stats.getClubGoals();
-                        double score = stats.getClubScore();
+                        int goals = stats.getClubGoalsScored();
+                        int score = stats.getClubGoalsScored();
                         double points = stats.getClubPoints();
                         int matches = stats.getClubMatches();
 
@@ -423,10 +337,12 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
     // Add Played match method
     public void addMatch(){
 
-        double team1Score = 0;
-        double team2Score = 0;
-        int team1Goals =0;
-        int team2Goals =0;
+
+        int team1GoalsReceived =0;
+        int team2GoalsReceived =0;
+        int team1GoalsScored = 0;
+        int team2GoalsScored = 0;
+
         Date date = null;
         String teamOne;
         String teamTwo;
@@ -477,22 +393,22 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
             }
 
             // Enter Team 1 Score
-            System.out.println("Enter Team One Score: ");
+            System.out.println("Enter Number of Team One Scored Goals: ");
 
             // Check score is in correct data type (Double)
             try {
-                team1Score = myObj.nextDouble();
+                team1GoalsScored = myObj.nextInt();
 
             } catch (InputMismatchException e) {
                 System.out.println("** Double Value Required! **");
             }
 
             // Enter Team 2 Score
-            System.out.println("Enter Team Two Score: ");
+            System.out.println("Enter Number of Team Two Scored Goals: ");
 
             // Check score is in correct data type (Double)
             try {
-                team2Score = myObj.nextDouble();
+                team2GoalsScored = myObj.nextInt();
 
             } catch (InputMismatchException e) {
                 System.out.println("** Double Value Required! **");
@@ -502,7 +418,7 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
             System.out.println("Enter Team One goals: ");
 
             try {
-                team1Goals = myObj.nextInt();
+                team1GoalsReceived = myObj.nextInt();
 
             } catch (InputMismatchException e) {
                 System.out.println("** You have to enter number of Goals. It should be integer value! **");
@@ -512,7 +428,7 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
             System.out.println("Enter Team Two goals: ");
 
             try {
-                team2Goals = myObj.nextInt();
+                team2GoalsReceived = myObj.nextInt();
 
             } catch (InputMismatchException e) {
                 System.out.println("** You have to enter number of Goals. It should be integer value! **");
@@ -523,31 +439,36 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
             match.setMatchDate(date);
             match.setTeamOne(teamOne);
             match.setTeamTwo(teamTwo);
-            match.setTeamScore1(team1Score);
-            match.setTeamScore2(team2Score);
-            match.setTeamGoals1(team1Goals);
-            match.setTeamGoals2(team2Goals);
+            match.setTeam1GoalsScored(team1GoalsScored);
+            match.setTeam2GoalsScored(team2GoalsScored);
+            match.setTeam2GoalsReceived(team1GoalsReceived);
+            match.setTeam2GoalsReceived(team2GoalsReceived);
 
             matchData.add(match);
 
-            firstTeam.setClubGoals(firstTeam.getClubGoals() + team1Goals);
-            secondTeam.setClubGoals(secondTeam.getClubGoals() + team2Goals);
-            firstTeam.setClubScore(firstTeam.getClubScore() + team1Score);
-            secondTeam.setClubScore(secondTeam.getClubScore() + team2Score);
-            firstTeam.setClubMatches(firstTeam.getClubMatches() + 1);
-            secondTeam.setClubMatches(secondTeam.getClubMatches() + 1);
+            firstTeam.setClubGoalsReceived(firstTeam.getClubGoalsReceived() + team1GoalsReceived);
+            secondTeam.setClubGoalsReceived(secondTeam.getClubGoalsReceived() + team2GoalsReceived);
+            firstTeam.setClubGoalsScored(firstTeam.getClubGoalsScored() + team1GoalsScored);
+            secondTeam.setClubGoalsScored(secondTeam.getClubGoalsScored() + team2GoalsScored);
 
-            if (team1Score > team2Score) {
-                firstTeam.setClubWins(firstTeam.getClubWins() + 1);
-                secondTeam.setClubDefeats(secondTeam.getClubDefeats() + 1);
+            firstTeam.setClubMatches(firstTeam.getClubMatches()+1);
+            secondTeam.setClubMatches(secondTeam.getClubMatches()+1);
 
-            } else if (team1Score < team2Score) {
-                secondTeam.setClubWins(secondTeam.getClubWins() + 1);
-                firstTeam.setClubDefeats(firstTeam.getClubDefeats() + 1);
+            if (team1GoalsScored > team2GoalsScored) {
+                firstTeam.setClubWins(firstTeam.getClubWins()+1);
+                secondTeam.setClubDefeats(secondTeam.getClubDefeats()+1);
+                firstTeam.setClubPoints(firstTeam.getClubPoints()+3);
+
+            } else if (team1GoalsScored < team2GoalsScored) {
+                secondTeam.setClubWins(secondTeam.getClubWins()+1);
+                firstTeam.setClubDefeats(firstTeam.getClubDefeats()+1);
+                secondTeam.setClubPoints(secondTeam.getClubPoints()+3);
 
             } else {
-                firstTeam.setClubDraws(firstTeam.getClubDraws() + 1);
-                secondTeam.setClubDraws(secondTeam.getClubDraws() + 1);
+                firstTeam.setClubDraws(firstTeam.getClubDraws()+1);
+                secondTeam.setClubDraws(secondTeam.getClubDraws()+1);
+                firstTeam.setClubPoints(firstTeam.getClubPoints()+1);
+                secondTeam.setClubPoints(secondTeam.getClubPoints()+1);
             }
             break;
         }
@@ -571,8 +492,8 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
                 // when both points are equal comparing with Goals
                 if (x.equals(y)){
 
-                    Integer p = o1.getClubGoals();
-                    Integer q = o2.getClubGoals();
+                    Integer p = o1.getClubGoalsScored();
+                    Integer q = o2.getClubGoalsScored();
 
                     result = q.compareTo(p);
 
@@ -596,9 +517,9 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
         for (FootballClub club: clubData){
             System.out.println(
                     "Club Points: "+ club.getClubPoints()+ "\t" +
-                            "Club Goals: "+club.getClubGoals()+"\t"+
+                            "Club Goals: "+club.getClubGoalsScored()+"\t"+
                             "Club Name: "+club.getClubName()+"\t"+
-                            "Club Score: "+club.getClubScore()+"\t"+
+                            "Club Score: "+club.getClubGoalsScored()+"\t"+
                             "Club Wins: "+club.getClubWins()+"\t");
 
         }
@@ -710,23 +631,23 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
         clubDraws.setCellValueFactory(new PropertyValueFactory<>("clubDraws"));
         clubDraws.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<FootballClub, String> clubGoals = new TableColumn<>("Goals");
-        clubGoals.setCellValueFactory(new PropertyValueFactory<>("clubGoals"));
-        clubGoals.setStyle("-fx-alignment: CENTER;");
+        TableColumn<FootballClub, String> clubGoalsScored = new TableColumn<>("Scored Goals");
+        clubGoalsScored.setCellValueFactory(new PropertyValueFactory<>("clubGoalsScored"));
+        clubGoalsScored.setStyle("-fx-alignment: CENTER;");
 
         TableColumn<FootballClub, String> clubPoints = new TableColumn<>("Points");
         clubPoints.setCellValueFactory(new PropertyValueFactory<>("clubPoints"));
         clubPoints.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<FootballClub, String> clubScore = new TableColumn<>("Score");
-        clubScore.setCellValueFactory(new PropertyValueFactory<>("clubScore"));
-        clubScore.setStyle("-fx-alignment: CENTER;");
+        TableColumn<FootballClub, String> clubGoalsReceived = new TableColumn<>("Received Goals");
+        clubGoalsReceived.setCellValueFactory(new PropertyValueFactory<>("clubGoalsReceived"));
+        clubGoalsReceived.setStyle("-fx-alignment: CENTER;");
 
 
         // Add data to column and show column in GUI
-        table.getColumns().setAll(clubName, clubWins, clubDefeats, clubDraws,clubGoals, clubPoints,clubScore);
-        table.setPrefWidth(600);
-        table.setPrefHeight(400);
+        table.getColumns().setAll(clubName, clubWins, clubDefeats, clubDraws,clubGoalsScored,clubGoalsReceived, clubPoints);
+        table.setPrefWidth(800);
+        table.setPrefHeight(600);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         table.getItems().setAll(clubData);
         table.setStyle("-fx-pref-rows: 100");
@@ -798,28 +719,28 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
         teamTwo.setCellValueFactory(new PropertyValueFactory<>("teamTwo"));
         teamTwo.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<Match, String> teamScore1 = new TableColumn<>("1st Team Score");
-        teamScore1.setCellValueFactory(new PropertyValueFactory<>("teamScore1"));
-        teamScore1.setStyle("-fx-alignment: CENTER;");
+        TableColumn<Match, String> team1GoalsScored = new TableColumn<>("Team 1 Scored Goals");
+        team1GoalsScored.setCellValueFactory(new PropertyValueFactory<>("team1GoalsScored"));
+        team1GoalsScored.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<Match, String> teamScore2 = new TableColumn<>("2nd Team Score");
-        teamScore2.setCellValueFactory(new PropertyValueFactory<>("teamScore2"));
-        teamScore2.setStyle("-fx-alignment: CENTER;");
+        TableColumn<Match, String> team2GoalsScored = new TableColumn<>("Team 2 Scored Goals");
+        team2GoalsScored.setCellValueFactory(new PropertyValueFactory<>("team2GoalsScored"));
+        team2GoalsScored.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<Match, String> teamGoals1 = new TableColumn<>("1st Team Goals");
-        teamGoals1.setCellValueFactory(new PropertyValueFactory<>("teamGoals1"));
-        teamGoals1.setStyle("-fx-alignment: CENTER;");
+        TableColumn<Match, String> team1GoalsReceived = new TableColumn<>("Team 1 Received Goals");
+        team1GoalsReceived.setCellValueFactory(new PropertyValueFactory<>("team1GoalsReceived"));
+        team1GoalsReceived.setStyle("-fx-alignment: CENTER;");
 
-        TableColumn<Match, String> teamGoals2 = new TableColumn<>("2nd Team Goals");
-        teamGoals2.setCellValueFactory(new PropertyValueFactory<>("teamGoals2"));
-        teamGoals2.setStyle("-fx-alignment: CENTER;");
+        TableColumn<Match, String> team2GoalsReceived = new TableColumn<>("Team 2 Received Goals");
+        team2GoalsReceived.setCellValueFactory(new PropertyValueFactory<>("team2GoalsReceived"));
+        team2GoalsReceived.setStyle("-fx-alignment: CENTER;");
 
         TableColumn<Match, String> matchDate = new TableColumn<>("D.O.M");
         matchDate.setCellValueFactory(new PropertyValueFactory<>("matchDate"));
         matchDate.setStyle("-fx-alignment: CENTER;");
 
         // Add data to column and show column in GUI
-        table.getColumns().setAll(teamOne,teamTwo,teamScore1,teamScore2,teamGoals1,teamGoals2,matchDate);
+        table.getColumns().setAll(teamOne,teamTwo,team1GoalsScored,team2GoalsScored,team1GoalsReceived,team2GoalsReceived,matchDate);
         table.setPrefWidth(1000);
         table.setPrefHeight(400);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -923,8 +844,8 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
                         int result;
 
                         // Compare 1st point to 2nd point
-                        Integer x = o1.getClubGoals();
-                        Integer y = o2.getClubGoals();
+                        Integer x = o1.getClubGoalsScored();
+                        Integer y = o2.getClubGoalsScored();
 
                         result = y.compareTo(x);
 
