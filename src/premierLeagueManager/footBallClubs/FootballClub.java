@@ -13,7 +13,7 @@ public class FootballClub extends SportsClub implements Serializable {
     private int clubDefeats;
     private int clubDraws;
     private int clubGoalsScored;
-    private double clubGoalsReceived;
+    private int clubGoalsReceived;
     private double clubPoints;
     private int clubMatches;
 
@@ -53,7 +53,7 @@ public class FootballClub extends SportsClub implements Serializable {
         this.clubGoalsScored = clubGoalsScored;
     }
 
-    public void setClubGoalsReceived(double clubGoalsReceived) {
+    public void setClubGoalsReceived(int clubGoalsReceived) {
         this.clubGoalsReceived = clubGoalsReceived;
     }
 
@@ -84,7 +84,7 @@ public class FootballClub extends SportsClub implements Serializable {
         return clubGoalsScored;
     }
 
-    public double getClubGoalsReceived() {
+    public int getClubGoalsReceived() {
         return clubGoalsReceived;
     }
 

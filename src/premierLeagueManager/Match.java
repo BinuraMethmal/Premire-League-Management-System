@@ -9,6 +9,7 @@ public class Match {
     private int team2GoalsReceived;
     private int team1GoalsScored;
     private int team2GoalsScored;
+    private boolean isManual;
 
     //Setters
     public void setTeamOne(String teamOne) {
@@ -39,6 +40,10 @@ public class Match {
         this.team2GoalsScored = team2GoalsScored;
     }
 
+    public void setManual(boolean manual) {
+        isManual = manual;
+    }
+
     //Getters
     public String getTeamOne() {
         return teamOne;
@@ -66,6 +71,10 @@ public class Match {
 
     public int getTeam2GoalsScored() {
         return team2GoalsScored;
+    }
+
+    public boolean isManual() {
+        return isManual;
     }
 
     public boolean search(String searchTerm){

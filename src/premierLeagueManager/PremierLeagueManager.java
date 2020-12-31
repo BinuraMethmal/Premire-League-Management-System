@@ -23,7 +23,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+
 public class PremierLeagueManager extends Application implements LeagueManger  {
+
+    // Declare some class variables
+    public static int winPoints = 3;
+    public static int drawPoints = 1;
 
     // Arrays for store Objects temporary
     public static ArrayList<FootballClub> clubData = new ArrayList<>(); // --> Football Clubs Details
@@ -315,14 +320,14 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
                         int wins = stats.getClubWins();
                         int draws = stats.getClubDraws();
                         int defeat = stats.getClubDefeats();
-                        int goals = stats.getClubGoalsScored();
-                        int score = stats.getClubGoalsScored();
+                        int scoredGoals = stats.getClubGoalsScored();
+                        int receivedGoals = stats.getClubGoalsReceived();
                         double points = stats.getClubPoints();
                         int matches = stats.getClubMatches();
 
 
                         System.out.println("Club Statistics: "+ name + "\n Wins: " + wins + "\n Draws: " + draws + "\n Defeats: " + defeat +
-                                "\n Goals: " + goals + "\n Score: " + score + "\n Points: " + points + "\n Matches: " + matches+"\n");
+                                "\n Scored Goals: " + scoredGoals + "\n Received Goals: " + receivedGoals + "\n Points: " + points + "\n Matches: " + matches+"\n");
 
                     }
 
@@ -511,102 +516,159 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
     // Display Statistics in a Table using CLI
     public void statsTableCLI(){
 
-        sortData();
+        if (clubData.size()>0){
 
-        // Print some of attributes of the table after sorted
-        for (FootballClub club: clubData){
-            System.out.println(
-                    "Club Points: "+ club.getClubPoints()+ "\t" +
-                            "Club Goals: "+club.getClubGoalsScored()+"\t"+
-                            "Club Name: "+club.getClubName()+"\t"+
-                            "Club Score: "+club.getClubGoalsScored()+"\t"+
-                            "Club Wins: "+club.getClubWins()+"\t");
+            sortData();
 
+            // Print some of attributes of the table after sorted
+            for (FootballClub club: clubData){
+                System.out.println(
+                        "Club Name: "+club.getClubName()+"\t"+
+                                "Club Points: "+ club.getClubPoints()+ "\t" +
+                                "Scored Goals: "+club.getClubGoalsScored()+"\t"+
+                                "Received Goals: "+club.getClubGoalsReceived()+"\t"+
+                                "Club Wins: "+club.getClubWins()+"\t"+
+                                "Matches: "+ club.getClubMatches()+"\t");
+
+
+            }
+        } else {
+            System.out.println("** No Clubs to Show Statistics.**");
         }
 
-//        // Table Formatting
-//
-//        String leftAlign = "| %-15s | %-6d | %-6d | %-6d | %-6d | %-6d | %-6d | %-6d |%n";
-//        System.out.format("+-----------------+---------+--------+--------+--------+-----------+--------+--------------+%n");
-//        System.out.format("| Club Name       | Matches | Won    | Lost   | Draw   | Goals     | Points    | Score     |%n");
-//        System.out.format("+-----------------+---------+--------+--------+--------+-----------+--------+--------------+%n");
-//
-//        // Print some of attributes of the table after sorted
-//        for (FootballClub club: clubData){
-//            System.out.format(leftAlign, club.getClubName(),club.getClubMatches(), club.getClubWins()
-//                    , club.getClubDefeats(), club.getClubGoals(), club.getClubPoints(), club.getClubScore() );
-//        }
-//
-//        System.out.format("+-----------------+---------+--------+--------+--------+-----------+--------+--------------+%n");
-//        System.out.println("\n");
     }
 
-    public void randomMatch(){
-        
+    // Method for generate Random Match
+    public static void randomMatch(){
+
+        if (clubData.size() > 1) {
+            ArrayList<Integer> teamIndexes = new ArrayList<>();
+
+            //Generate random team indexes
+            Random randomGenerator = new Random();
+            while (teamIndexes.size() < 2) {
+
+                int random = randomGenerator.nextInt(clubData.size());
+                if (!teamIndexes.contains(random)) {
+                    teamIndexes.add(random);
+                }
+            }
+
+            //Generate Date
+            Calendar calendar = Calendar.getInstance();
+            int year = randomGenerator.nextInt((calendar.getTime().getYear() + 1) + 2000) + 2000;
+            int month = randomGenerator.nextInt(12) + 1;
+            int date = randomGenerator.nextInt(31) + 1;
+            Date finalDate = new Date(date + "/" + month + "/" + year);
+
+            //Generate Statistics
+            int team1ScoredGoals = randomGenerator.nextInt(10);
+            int team2ScoredGoals = randomGenerator.nextInt(10);
+            int team1ReceivedGoals = team2ScoredGoals;
+            int team2ReceivedGoals = team1ScoredGoals;
+
+            // Make Match object for Random match
+            Match randomMatch = new Match();
+            randomMatch.setMatchDate(finalDate);
+            randomMatch.setTeamOne(clubData.get(teamIndexes.get(0)).getClubName());
+            randomMatch.setTeamTwo(clubData.get(teamIndexes.get(1)).getClubName());
+            randomMatch.setTeam1GoalsScored(team1ScoredGoals);
+            randomMatch.setTeam2GoalsScored(team2ScoredGoals);
+            randomMatch.setTeam1GoalsReceived(team1ReceivedGoals);
+            randomMatch.setTeam2GoalsReceived(team2ReceivedGoals);
+            randomMatch.setManual(false);
+
+            matchData.add(randomMatch); // Add Random match --> matchData
+            System.out.println("** Random Match Generated **");
+            //System.out.println(randomMatch.toString());
+
+            // Update Statistics
+            clubData.get(teamIndexes.get(0)).setClubGoalsScored(clubData.get(teamIndexes.get(0)).getClubGoalsScored() + team1ScoredGoals);
+            clubData.get(teamIndexes.get(1)).setClubGoalsScored(clubData.get(teamIndexes.get(1)).getClubGoalsScored() + team2ScoredGoals);
+            clubData.get(teamIndexes.get(0)).setClubGoalsReceived(clubData.get(teamIndexes.get(0)).getClubGoalsReceived() + team1ReceivedGoals);
+            clubData.get(teamIndexes.get(1)).setClubGoalsReceived(clubData.get(teamIndexes.get(1)).getClubGoalsReceived() + team2ReceivedGoals);
+            clubData.get(teamIndexes.get(0)).setClubMatches(clubData.get(teamIndexes.get(0)).getClubMatches() + 1);
+            clubData.get(teamIndexes.get(1)).setClubMatches(clubData.get(teamIndexes.get(1)).getClubMatches() + 1);
+
+            if (team1ScoredGoals > team2ScoredGoals) {
+
+                clubData.get(teamIndexes.get(0)).setClubWins(clubData.get(teamIndexes.get(0)).getClubWins() + 1);
+                clubData.get(teamIndexes.get(1)).setClubDefeats(clubData.get(teamIndexes.get(1)).getClubDefeats() + 1);
+                clubData.get(teamIndexes.get(0)).setClubPoints(clubData.get(teamIndexes.get(0)).getClubPoints() + winPoints);
+
+            } else if (team1ScoredGoals < team2ScoredGoals) {
+
+                clubData.get(teamIndexes.get(1)).setClubWins(clubData.get(teamIndexes.get(1)).getClubWins() + 1);
+                clubData.get(teamIndexes.get(0)).setClubDefeats(clubData.get(teamIndexes.get(0)).getClubDefeats() + 1);
+                clubData.get(teamIndexes.get(1)).setClubPoints(clubData.get(teamIndexes.get(1)).getClubPoints() + winPoints);
+
+            } else {
+                clubData.get(teamIndexes.get(0)).setClubPoints(clubData.get(teamIndexes.get(0)).getClubPoints() + drawPoints);
+                clubData.get(teamIndexes.get(1)).setClubPoints(clubData.get(teamIndexes.get(1)).getClubPoints() + drawPoints);
+
+            }
+        } else {
+            System.out.println("Error");
+        }
     }
 
     // Method for Save data to Local file
-    public void saveData()throws IOException  {
+    public void saveData()throws IOException {
 
-        File file1 = new File("PremierLeagueMangerData.txt");
-        file1.createNewFile();
+        try {
 
-        FileOutputStream fileOut = new FileOutputStream(file1,true);
-        ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
+            // Write Club details into txt file
+            File file1 = new File("src/tempFiles/Club_Data.txt");
+            file1.createNewFile();
 
-        Iterator it1 = clubData.iterator();
-        Iterator it2 = matchData.iterator();
+            FileOutputStream fileOut1 = new FileOutputStream(file1, false);
+            ObjectOutputStream objOut1 = new ObjectOutputStream(fileOut1);
 
-        while (it1.hasNext()){
+            objOut1.writeObject(clubData);
 
-            FootballClub clubTemp = (FootballClub) it1.next();
-            objOut.writeObject(clubTemp);
+            fileOut1.close();
+            objOut1.close();
 
+            // Write Match Data into txt file
+            File file2 = new File("src/tempFiles/Match_Data.txt");
+            file2.createNewFile();
+
+            FileOutputStream fileOut2 = new FileOutputStream(file2, false);
+            ObjectOutputStream objOut2 = new ObjectOutputStream(fileOut2);
+
+            objOut2.writeObject(matchData);
+
+            fileOut2.close();
+            objOut2.close();
+
+        } catch ( IOException i){
+            i.printStackTrace();
         }
-
-        while (it2.hasNext()){
-
-            FootballClub matchTemp = (FootballClub) it2.next();
-            objOut.writeObject(matchTemp);
-
-        }
-
-        fileOut.close();
-        objOut.close();
-
     }
 
     // Method to Load data from saved file
     public void loadData() throws IOException, ClassNotFoundException{
+        try {
+            FileInputStream fileIn1 = new FileInputStream("src/tempFiles/Club_Data.txt");
+            FileInputStream fileIn2 = new FileInputStream("src/tempFiles/Match_Data.txt");
 
-        FileInputStream fileIn = new FileInputStream("PremierLeagueMangerData.txt");
-        ObjectInputStream objIn = new ObjectInputStream(fileIn);
+            if (fileIn1 != null && fileIn2 != null) {
+                ObjectInputStream objIn1 = new ObjectInputStream(fileIn1);
+                ObjectInputStream objIn2 = new ObjectInputStream(fileIn2);
 
-        while (true){
-            try {
-                FootballClub club = (FootballClub) objIn.readObject();
-                clubData.add(club);
+                ArrayList<FootballClub> tempClubData = (ArrayList<FootballClub>) objIn1.readObject();
+                clubData = tempClubData;
+                fileIn1.close();
+                objIn1.close();
 
-            } catch (IOException | ClassNotFoundException e){
-                break;
-
+                ArrayList<Match> tempMatchData = (ArrayList<Match>) objIn2.readObject();
+                matchData = tempMatchData;
+                fileIn2.close();
+                fileIn2.close();
             }
+        } catch (IOException e) {
+            System.out.println("** Welcome to the Premier League Manager ** \n ** No Data Found **");
         }
-
-        while (true){
-            try {
-                Match match = (Match) objIn.readObject();
-                matchData.add(match);
-
-            } catch (IOException | ClassNotFoundException e){
-                break;
-
-            }
-        }
-
-        fileIn.close();
-        objIn.close();
-
     }
 
     // Display Statistics in a Table using GUI
@@ -914,8 +976,11 @@ public class PremierLeagueManager extends Application implements LeagueManger  {
         bt4.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
-
+                randomMatch();
+                Label msgLabel1 = new Label("** Random Match Generated. **");
+                msgLabel1.setStyle("-fx-font-size: 20");
+                GridPane.setConstraints(msgLabel1,3,6);
+                grid.getChildren().add(msgLabel1);
             }
         });
 
