@@ -12,34 +12,11 @@ public class FootballClub extends SportsClub implements Serializable {
     private int clubWins;
     private int clubDefeats;
     private int clubDraws;
-    private int clubGoals;
-    private double clubScore;
+    private int clubGoalsScored;
+    private int clubGoalsReceived;
     private double clubPoints;
     private int clubMatches;
-    private String teamOne;
-    private String teamTwo;
-    private Date matchDate;
-    private double teamScore1;
-    private double teamScore2;
 
-
-
-
-    // Overloading Constructor
-    public FootballClub(String clubName, String clubAddress1, String clubCity, String clubZipCode, String clubCountry, int clubWins, int clubDefeats, int clubDraws, int clubGoals, double clubScore, double clubPoints, int clubMatches, String teamOne, String teamTwo, Date matchDate, double matchScore) {
-        super(clubName, clubAddress1, clubCity, clubZipCode, clubCountry);
-        this.clubWins = clubWins;
-        this.clubDefeats = clubDefeats;
-        this.clubDraws = clubDraws;
-        this.clubGoals = clubGoals;
-        this.clubScore = clubScore;
-        this.clubPoints = clubPoints;
-        this.clubMatches = clubMatches;
-        this.teamOne = teamOne;
-        this.teamTwo = teamTwo;
-        this.matchDate = matchDate;
-        this.teamScore1 = matchScore;
-    }
 
     public FootballClub() {
         //Default Constructor
@@ -63,10 +40,6 @@ public class FootballClub extends SportsClub implements Serializable {
         this.clubDraws = clubDraws;
     }
 
-    public void setClubGoals(int clubGoals) {
-        this.clubGoals = clubGoals;
-    }
-
     public void setClubMatches(int clubMatches) {
         this.clubMatches = clubMatches;
     }
@@ -76,28 +49,12 @@ public class FootballClub extends SportsClub implements Serializable {
         this.clubPoints = clubPoints;
     }
 
-    public void setClubScore(double clubScore) {
-        this.clubScore = clubScore;
+    public void setClubGoalsScored(int clubGoalsScored) {
+        this.clubGoalsScored = clubGoalsScored;
     }
 
-    public void setTeamOne(String teamOne) {
-        this.teamOne = teamOne;
-    }
-
-    public void setTeamTwo(String teamTwo) {
-        this.teamTwo = teamTwo;
-    }
-
-    public void setMatchDate(Date matchDate) {
-        this.matchDate = matchDate;
-    }
-
-    public void setTeamScore1(double teamScore1) {
-        this.teamScore1 = teamScore1;
-    }
-
-    public void setTeamScore2(double teamScore2) {
-        this.teamScore2 = teamScore2;
+    public void setClubGoalsReceived(int clubGoalsReceived) {
+        this.clubGoalsReceived = clubGoalsReceived;
     }
 
     // Getters
@@ -115,14 +72,6 @@ public class FootballClub extends SportsClub implements Serializable {
         return clubDraws;
     }
 
-    public int getClubGoals() {
-        return clubGoals;
-    }
-
-    public double getClubScore() {
-        return clubScore;
-    }
-
     public double getClubPoints() {
         return clubPoints;
     }
@@ -131,59 +80,39 @@ public class FootballClub extends SportsClub implements Serializable {
         return clubMatches;
     }
 
-    public String getTeamOne() {
-        return teamOne;
+    public int getClubGoalsScored() {
+        return clubGoalsScored;
     }
 
-    public String getTeamTwo() {
-        return teamTwo;
-    }
-
-    public Date getMatchDate() {
-        return matchDate;
-    }
-
-    public double getTeamScore1() {
-        return teamScore1;
-    }
-
-    public double getTeamScore2() {
-        return teamScore2;
-    }
-
-    @Override
-    public String toString() {
-        return "FootballClub{" +
-                "Wins=" + clubWins +
-                ", Defeats=" + clubDefeats +
-                ", Draws=" + clubDraws +
-                ", Goals=" + clubGoals +
-                ", Score=" + clubScore +
-                ", Points=" + clubPoints +
-                ", Matches=" + clubMatches +
-                '}';
+    public int getClubGoalsReceived() {
+        return clubGoalsReceived;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof FootballClub)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         FootballClub that = (FootballClub) o;
-        return getClubWins() == that.getClubWins() &&
-                getClubDefeats() == that.getClubDefeats() &&
-                getClubDraws() == that.getClubDraws() &&
-                getClubGoals() == that.getClubGoals() &&
-                Double.compare(that.getClubScore(), getClubScore()) == 0 &&
-                Double.compare(that.getClubPoints(), getClubPoints()) == 0 &&
-                getClubMatches() == that.getClubMatches();
-
+        return clubWins == that.clubWins && clubDefeats == that.clubDefeats && clubDraws == that.clubDraws && clubGoalsScored == that.clubGoalsScored && Double.compare(that.clubGoalsReceived, clubGoalsReceived) == 0 && Double.compare(that.clubPoints, clubPoints) == 0 && clubMatches == that.clubMatches;
     }
-
-
 
     @Override
     public int hashCode() {
-        return Objects.hash(getClubWins(), getClubDefeats(), getClubDraws(), getClubGoals(), getClubScore(), getClubPoints(), getClubMatches());
+        return Objects.hash(super.hashCode(), clubWins, clubDefeats, clubDraws, clubGoalsScored, clubGoalsReceived, clubPoints, clubMatches);
+    }
+
+    @Override
+    public String toString() {
+        return "FootballClub{" +
+                "Club Wins=" + clubWins +
+                ", Club Defeats=" + clubDefeats +
+                ", Club Draws=" + clubDraws +
+                ", Club Goals (Scored)=" + clubGoalsScored +
+                ", Club Goals (Received)=" + clubGoalsReceived +
+                ", Club Points=" + clubPoints +
+                ", Club Matches=" + clubMatches +
+                '}';
     }
 }
 
